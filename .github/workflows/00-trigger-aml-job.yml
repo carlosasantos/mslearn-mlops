@@ -13,6 +13,9 @@ on:
         required: true
         default: 'mlw-dev-mlops' 
         type: string
+  push:
+    branches:
+      - main
 
 jobs:
   train-model:
