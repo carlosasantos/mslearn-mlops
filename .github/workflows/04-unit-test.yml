@@ -9,10 +9,10 @@ jobs:
     steps:
     - name: Check out repo
       uses: actions/checkout@main
-    - name: Use Python version 3.7
+    - name: Use Python version 3.8
       uses: actions/setup-python@v3
       with:
-        python-version: '3.7'
+        python-version: '3.8'
     - name: Install PyTest
       run: |
           pip install -r requirements.txt
