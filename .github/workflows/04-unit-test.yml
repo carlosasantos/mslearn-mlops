@@ -1,4 +1,4 @@
-name: Linting
+name: Unit Testing
 
 on:
   workflow_dispatch:
