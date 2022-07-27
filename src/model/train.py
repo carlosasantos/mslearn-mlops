@@ -22,7 +22,7 @@ def main(args):
 
     # train model
     model = train_model(args.reg_rate, X_train, X_test, y_train, y_test)
-
+    return model
 
 def get_csvs_df(path):
     if not os.path.exists(path):
