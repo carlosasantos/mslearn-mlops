@@ -55,6 +55,8 @@ jobs:
         az configure --defaults workspace='mlw-dev-mlops' 
     - name: Deploy Model
       run: |
+        cd src/
         az ml model list
-
+        az ml online-endpoint create -f endpoint.yml
+        az ml online-deployment create -f deployment.yml --all-traffic
 
