@@ -32,9 +32,9 @@ jobs:
     - name: Register the model in the registry
       run:  |
           JOB_NAME=$(az ml job list --query "[0].name" | tr -d '"')
-          az ml model create --name "my-mlflow-model" \
+          az ml model create --name "diabetes-model" \
                    --type "mlflow_model" \
-                   --path "azureml://jobs/$JOB_NAME/outputs/artifacts/model      
+                   --path "azureml://jobs/$JOB_NAME/outputs/artifacts/model"    
 
   deploy-model:
     runs-on: ubuntu-latest
