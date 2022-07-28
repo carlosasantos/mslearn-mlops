@@ -25,10 +25,16 @@ jobs:
     - name: Train an Azure Machine Learning job
       run: |
         cd src
-        # az ml job create --file job.yml --stream
+        az ml job create --file job.yml --stream
         # RUN_ID=$(az ml job create --file job.yml --stream --query name -o tsv)
-        RUN_ID=$(az ml job create --file job.yml --stream --query RunId)  
-        az ml model create --name diabetes-model --version 1 --path runs:/$RUN_ID/model/ --type mlflow_model
+        # RUN_ID=$(az ml job create --file job.yml --stream --query RunId)  
+        # az ml model create --name diabetes-model --version 1 --path runs:/$RUN_ID/model/ --type mlflow_model
+    - name: Register the model in the registry
+      run:  |
+          JOB_NAME=$(az ml job list --query "[0].name" | tr -d '"')
+          az ml model create --name "my-mlflow-model" \
+                   --type "mlflow_model" \
+                   --path "azureml://jobs/$JOB_NAME/outputs/artifacts/model      
 
   deploy-model:
     runs-on: ubuntu-latest
@@ -47,7 +53,7 @@ jobs:
       run: |
         az configure --defaults group='rg-dev-mlops' 
         az configure --defaults workspace='mlw-dev-mlops' 
-    - name: Train an Azure Machine Learning job
+    - name: Deploy Model
       run: |
         az ml model list
 
