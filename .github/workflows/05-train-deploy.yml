@@ -25,8 +25,9 @@ jobs:
     - name: Train an Azure Machine Learning job
       run: |
         cd src
-        RUN_ID=$(az ml job create --file job.yml --query name -o tsv)
-        az ml model create --name diabetes-model --version 1 --path runs:/$RUN_ID/model/ --type mlflow_model
+        az ml job create --file job.yml
+        # RUN_ID=$(az ml job create --file job.yml --query name -o tsv)
+        # az ml model create --name diabetes-model --version 1 --path runs:/$RUN_ID/model/ --type mlflow_model
 
   deploy-model:
     runs-on: ubuntu-latest
