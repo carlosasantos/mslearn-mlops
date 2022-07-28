@@ -1,0 +1,51 @@
+name: Automatically trigger an Azure Machine Learning job
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Set Azure ML workspace as default
+      run: |
+        az configure --defaults group='rg-dev-mlops' 
+        az configure --defaults workspace='mlw-dev-mlops' 
+    - name: Train an Azure Machine Learning job
+      run: |
+        cd src
+        RUN_ID=$(az ml job create --file job.yml)
+        az ml model create --name diabetes-model --version 1 --path runs:/$RUN_ID/model/ --type mlflow_model
+
+  deploy-model:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Set Azure ML workspace as default
+      run: |
+        az configure --defaults group='rg-dev-mlops' 
+        az configure --defaults workspace='mlw-dev-mlops' 
+    - name: Train an Azure Machine Learning job
+      run: |
+        az ml model list
+
+
