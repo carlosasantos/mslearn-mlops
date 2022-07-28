@@ -26,7 +26,8 @@ jobs:
       run: |
         cd src
         # az ml job create --file job.yml --stream
-        RUN_ID=$(az ml job create --file job.yml --stream --query name -o tsv)
+        # RUN_ID=$(az ml job create --file job.yml --stream --query name -o tsv)
+        RUN_ID=$(az ml job create --file job.yml --stream --query RunId)  
         az ml model create --name diabetes-model --version 1 --path runs:/$RUN_ID/model/ --type mlflow_model
 
   deploy-model:
